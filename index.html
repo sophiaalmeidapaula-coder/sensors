@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="default" data-font="default">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Sensors — site educacional sobre sensores de luz (LDR e fotodiodo), radiação solar e o Projeto da Piscina do CEP. Interativo, acessível e em Libras.">
+<meta name="theme-color" content="#ff8a00">
+<title>Sensors — Sensores de Luz, Radiação Solar e o Projeto da Piscina do CEP</title>
+
+<!-- Fonte OpenDyslexic -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/open-dyslexic" rel="stylesheet">
+
+<!-- VLibras (acessibilidade em Libras) -->
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+
+<style>
+/* =========================================================
+   SENSORS — Design System "Sol + Água"
+   Mobile-first · Acessível · Responsivo
+   ========================================================= */
+
+:root{
+  /* Paleta Sol + Água */
+  --sol-1:#ffd166;
+  --sol-2:#ff8a00;
+  --sol-3:#e85d04;
+  --agua-1:#caf0f8;
+  --agua-2:#48cae4;
+  --agua-3:#0077b6;
+  --agua-4:#03045e;
+
+  /* Superfícies e texto */
+  --bg:#fffaf0;
+  --bg-2:#ffffff;
+  --surface:#ffffff;
+  --text:#0a1a2f;
+  --text-soft:#2b3a55;
+  --muted:#5a6b85;
+  --border:#d9e2ec;
+  --focus:#0077b6;
+  --ok:#2a9d8f;
+  --warn:#e76f51;
+
+  /* Tipografia */
+  --font-base:'Inter','Atkinson Hyperlegible',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --font-size:17px;
+  --lh:1.65;
+  --radius:14px;
+  --shadow:0 6px 18px rgba(3,4,94,.08);
+  --shadow-lg:0 18px 40px rgba(3,4,94,.15);
+}
+
+/* Modo alto contraste (WCAG AAA) */
+html[data-theme="high-contrast"]{
+  --bg:#000000;
+  --bg-2:#000000;
+  --surface:#000000;
+  --text:#ffffff;
+  --text-soft:#ffffff;
+  --muted:#e5e5e5;
+  --border:#ffffff;
+  --focus:#ffeb3b;
+  --sol-1:#ffeb3b;
+  --sol-2:#ff9800;
+  --sol-3:#ff5722;
+  --agua-1:#000000;
+  --agua-2:#4fc3f7;
+  --agua-3:#ffffff;
+  --agua-4:#ffffff;
+  --shadow:none;
+  --shadow-lg:none;
+}
+
+/* Fonte para dislexia */
+html[data-font="dyslexic"]{
+  --font-base:'OpenDyslexic','Atkinson Hyperlegible',system-ui,sans-serif;
+}
+
+html[data-font="large"]{ --font-size:20px; }
+html[data-font="xlarge"]{ --font-size:23px; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:var(--font-base);
+  font-size:var(--font-size);
+  line-height:var(--lh);
+  color:var(--text);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Skip link */
+.skip-link{
+  position:absolute;left:-9999px;top:0;
+  background:var(--focus);color:#fff;padding:12px 18px;
+  font-weight:700;z-index:9999;border-radius:0 0 8px 0;
+}
+.skip-link:focus{left:0}
+
+/* Foco visível em tudo */
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:3px;
+  border-radius:6px;
+}
+
+/* Cabeçalho */
+header.site-header{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(135deg,var(--sol-2),var(--agua-3));
+  color:#fff;
+  box-shadow:var(--shadow);
+}
+html[data-theme="high-contrast"] header.site-header{
+  background:#000;border-bottom:3px solid #fff;
+}
+.header-inner{
+  max-width:1200px;margin:0 auto;
+  padding:14px 18px;
+  display:flex;flex-wrap:wrap;gap:12px;
+  align-items:center;justify-content:space-between;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  font-weight:800;font-size:1.35rem;letter-spacing:.3px;
+  text-decoration:none;color:#fff;
+}
+.brand-mark{
+  width:42px;height:42px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#fff6c2 0%,#ffd166 35%,#ff8a00 70%,#0077b6 100%);
+  box-shadow:0 0 0 3px rgba(255,255,255,.4), 0 0 20px rgba(255,209,102,.6);
+  display:grid;place-items:center;font-size:22px;
+}
+nav.primary ul{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+nav.primary a{
+  color:#fff;text-decoration:none;
+  padding:8px 12px;border-radius:8px;
+  font-weight:600;font-size:.95rem;
+}
+nav.primary a:hover,nav.primary a:focus-visible{
+  background:rgba(255,255,255,.2);
+}
+
+/* Barra de acessibilidade */
+.a11y-bar{
+  background:var(--bg-2);
+  border-bottom:1px solid var(--border);
+  padding:8px 18px;
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+}
+.a11y-bar button{
+  font:inherit;font-size:.9rem;font-weight:600;
+  background:var(--surface);color:var(--text);
+  border:2px solid var(--border);
+  padding:8px 14px;border-radius:999px;cursor:pointer;
+  transition:transform .1s, background .2s;
+}
+.a11y-bar button:hover{transform:translateY(-1px)}
+.a11y-bar button[aria-pressed="true"]{
+  background:var(--agua-3);color:#fff;border-color:var(--agua-3);
+}
+html[data-theme="high-contrast"] .a11y-bar button[aria-pressed="true"]{
+  background:#ffeb3b;color:#000;border-color:#ffeb3b;
+}
+
+/* Layout geral */
+main{max-width:1200px;margin:0 auto;padding:24px 18px 60px}
+section{margin:48px 0;scroll-margin-top:120px}
+h1,h2,h3,h4{color:var(--text);line-height:1.25;margin:0 0 .6em}
+h1{font-size:clamp(1.8rem,4vw,2.8rem)}
+h2{font-size:clamp(1.4rem,3vw,2rem);
+   border-left:6px solid var(--sol-2);padding-left:14px}
+h3{font-size:1.25rem;color:var(--agua-4)}
+html[data-theme="high-contrast"] h3{color:#fff}
+p{margin:0 0 1em;color:var(--text-soft)}
+html[data-theme="high-contrast"] p{color:#fff}
+ul,ol{padding-left:1.3em}
+li{margin-bottom:.4em}
+
+/* Hero */
+.hero{
+  position:relative;overflow:hidden;
+  border-radius:var(--radius);
+  padding:40px 24px;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(255,209,102,.9), transparent 55%),
+    radial-gradient(circle at 15% 85%, rgba(72,202,228,.9), transparent 55%),
+    linear-gradient(135deg,var(--sol-1),var(--agua-2));
+  color:#0a1a2f;
+  box-shadow:var(--shadow-lg);
+}
+html[data-theme="high-contrast"] .hero{
+  background:#000;border:3px solid #fff;color:#fff;
+}
+.hero p{color:inherit;font-size:1.1rem;max-width:720px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.btn{
+  display:inline-block;padding:12px 20px;border-radius:10px;
+  font-weight:700;text-decoration:none;border:2px solid transparent;
+  cursor:pointer;font:inherit;font-size:1rem;
+}
+.btn-primary{background:var(--agua-4);color:#fff}
+.btn-primary:hover{background:var(--agua-3)}
+.btn-ghost{background:transparent;color:#fff;border-color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.2)}
+html[data-theme="high-contrast"] .btn-primary{background:#ffeb3b;color:#000}
+html[data-theme="high-contrast"] .btn-ghost{border-color:#ffeb3b;color:#ffeb3b}
+
+/* Cards */
+.grid{display:grid;gap:18px}
+.grid-2{grid-template-columns:1fr}
+.grid-3{grid-template-columns:1fr}
+@media(min-width:720px){
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.card h3{margin-top:0}
+
+/* Caixas informativas */
+.callout{
+  border-radius:var(--radius);
+  padding:16px 18px;margin:16px 0;
+  border-left:6px solid var(--agua-3);
+  background:var(--agua-1);
+  color:#003554;
+}
+html[data-theme="high-contrast"] .callout{
+  background:#000;border-color:#ffeb3b;color:#fff;
+}
+.callout.warn{border-color:var(--warn);background:#fde9e4;color:#5a1a0b}
+.callout.ok{border-color:var(--ok);background:#e6f5f2;color:#0b4f47}
+html[data-theme="high-contrast"] .callout.warn,
+html[data-theme="high-contrast"] .callout.ok{background:#000;color:#fff}
+
+/* Simuladores */
+.simulator{
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;margin:20px 0;
+  box-shadow:var(--shadow);
+}
+.simulator h3{
+  display:flex;align-items:center;gap:10px;
+  color:var(--agua-4);
+}
+html[data-theme="high-contrast"] .simulator h3{color:#ffeb3b}
+.sim-stage{
+  position:relative;
+  background:linear-gradient(180deg,#87ceeb 0%,#caf0f8 60%,#48cae4 100%);
+  border-radius:12px;
+  min-height:260px;overflow:hidden;
+  margin:14px 0;
+  border:1px solid var(--border);
+}
+html[data-theme="high-contrast"] .sim-stage{
+  background:#000;border:2px solid #fff;
+}
+.sim-controls{
+  display:grid;gap:12px;
+  grid-template-columns:1fr;
+}
+@media(min-width:640px){.sim-controls{grid-template-columns:1fr 1fr}}
+.control{
+  display:flex;flex-direction:column;gap:6px;
+}
+.control label{font-weight:700;font-size:.95rem}
+.control input[type="range"]{width:100%}
+.readout{
+  display:grid;gap:8px;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  margin-top:12px;
+}
+.readout .metric{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;
+}
+.readout .metric strong{
+  display:block;font-size:.8rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.readout .metric .value{
+  font-size:1.3rem;font-weight:800;color:var(--agua-4);
+}
+html[data-theme="high-contrast"] .readout .metric .value{color:#ffeb3b}
+
+/* LDR visual */
+.ldr-visual{
+  position:relative;height:240px;
+}
+.sun{
+  position:absolute;top:20px;left:50%;
+  width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle,#fff6c2,#ffd166 40%,#ff8a00 80%);
+  box-shadow:0 0 40px rgba(255,209,102,.8);
+  transform:translateX(-50%);
+  transition:all .3s;
+}
+.ldr-sensor{
+  position:absolute;bottom:20px;left:50%;
+  transform:translateX(-50%);
+  width:80px;height:50px;
+  background:repeating-linear-gradient(45deg,#6b4423 0 6px,#8b5a2b 6px 12px);
+  border:3px solid #3d2817;border-radius:8px;
+  display:grid;place-items:center;color:#fff;font-weight:700;
+  font-size:.8rem;
+}
+.led-indicator{
+  position:absolute;bottom:30px;right:30px;
+  width:36px;height:36px;border-radius:50%;
+  background:#444;border:3px solid #222;
+  transition:all .3s;
+}
+.led-indicator.on{
+  background:radial-gradient(circle,#fff,#ff3b3b 60%,#a00);
+  box-shadow:0 0 30px #ff3b3b;
+}
+
+/* Coletor solar (posicionamento) */
+.collector-stage{
+  position:relative;height:300px;
+  background:linear-gradient(180deg,#ffd8a8 0%,#ffe8cc 40%,#c8e6c9 100%);
+  border-radius:12px;overflow:hidden;
+}
+html[data-theme="high-contrast"] .collector-stage{background:#000;border:2px solid #fff}
+.collector-sun{
+  position:absolute;width:60px;height:60px;border-radius:50%;
+  background:radial-gradient(circle,#fff6c2,#ff8a00);
+  box-shadow:0 0 30px #ffd166;
+  transition:all .4s;
+}
+.collector-panel{
+  position:absolute;bottom:30px;left:50%;
+  width:160px;height:20px;
+  background:linear-gradient(135deg,#1a237e,#0d47a1);
+  border:2px solid #000;
+  transform-origin:center bottom;
+  transition:transform .3s;
+}
+.collector-panel::before{
+  content:'';position:absolute;inset:3px;
+  background:
+    linear-gradient(90deg,transparent 49%,rgba(255,255,255,.3) 50%,transparent 51%),
+    linear-gradient(0deg,transparent 49%,rgba(255,255,255,.3) 50%,transparent 51%);
+  background-size:33% 50%;
+}
+.ground{
+  position:absolute;bottom:0;left:0;right:0;height:30px;
+  background:linear-gradient(180deg,#8d6e63,#5d4037);
+}
+
+/* Tabela */
+table{
+  width:100%;border-collapse:collapse;margin:14px 0;
+  background:var(--surface);border-radius:10px;overflow:hidden;
+}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--agua-3);color:#fff;font-weight:700}
+html[data-theme="high-contrast"] th{background:#ffeb3b;color:#000}
+tr:last-child td{border-bottom:none}
+
+/* Libras placeholder */
+.libras-box{
+  background:var(--agua-1);
+  border:2px dashed var(--agua-3);
+  border-radius:var(--radius);
+  padding:18px;margin:14px 0;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+html[data-theme="high-contrast"] .libras-box{background:#000;border-color:#ffeb3b}
+.libras-icon{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--agua-3);color:#fff;
+  display:grid;place-items:center;font-size:24px;flex-shrink:0;
+}
+
+/* Rodapé */
+footer{
+  background:var(--agua-4);color:#fff;
+  padding:30px 18px;margin-top:40px;
+}
+footer a{color:#ffd166}
+html[data-theme="high-contrast"] footer{background:#000;border-top:3px solid #fff}
+footer .foot-inner{max-width:1200px;margin:0 auto;display:grid;gap:18px}
+@media(min-width:720px){footer .foot-inner{grid-template-columns:2fr 1fr 1fr}}
+
+/* Mapa do site */
+.sitemap{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+}
+.sitemap ul{list-style:none;padding:0}
+.sitemap li{padding:6px 0;border-bottom:1px dashed var(--border)}
+.sitemap li:last-child{border:none}
+.sitemap a{color:var(--agua-3);font-weight:600;text-decoration:none}
+.sitemap a:hover{text-decoration:underline}
+
+/* VLibras ajuste */
+[vw]{z-index:9998}
+
+/* Reduzir movimento */
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+
+<body>
+
+<a href="#main" class="skip-link">Pular para o conteúdo principal</a>
+
+<!-- ============== CABEÇALHO ============== -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="#top" class="brand" aria-label="Sensors — página inicial">
+      <span class="brand-mark" aria-hidden="true">☀</span>
+      <span>Sensors</span>
+    </a>
+    <nav class="primary" aria-label="Menu principal">
+      <ul>
+        <li><a href="#radiacao">Radiação</a></li>
+        <li><a href="#sensores">Sensores</a></li>
+        <li><a href="#simuladores">Simuladores</a></li>
+        <li><a href="#piscina">Piscina CEP</a></li>
+        <li><a href="#limitacoes">Limitações</a></li>
+        <li><a href="#mapa">Mapa do site</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="a11y-bar" role="toolbar" aria-label="Controles de acessibilidade">
+    <button id="btnContrast" type="button" aria-pressed="false">◐ Alto contraste</button>
+    <button id="btnDyslexic" type="button" aria-pressed="false">🔤 Fonte para dislexia</button>
+    <button id="btnFontDown" type="button" aria-label="Diminuir tamanho da fonte">A−</button>
+    <button id="btnFontUp" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+    <button id="btnVlibras" type="button" aria-label="Ativar VLibras (Libras)">🤟 VLibras</button>
+  </div>
+</header>
+
+<!-- ============== CONTEÚDO PRINCIPAL ============== -->
+<main id="main" role="main">
+
+  <!-- HERO -->
+  <section id="top" class="hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">Sensors: a luz do Sol aquecendo a piscina do CEP</h1>
+    <p>
+      Um site educacional, interativo e 100% acessível sobre <strong>sensores de luz</strong>,
+      <strong>radiação eletromagnética</strong> e <strong>robótica aplicada</strong> ao
+      <strong>Projeto da Piscina do CEP</strong>. Aqui você descobre como um LDR ou fotodiodo
+      enxerga o Sol, compara intensidades em diferentes posições e identifica o melhor
+      posicionamento para um coletor solar — tudo com simuladores que rodam no seu celular.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#simuladores">Abrir simuladores</a>
+      <a class="btn btn-ghost" href="#piscina">Ver o Projeto da Piscina</a>
+    </div>
+
+    <div class="libras-box" role="region" aria-label="Apresentação em Libras">
+      <div class="libras-icon" aria-hidden="true">🤟</div>
+      <div style="flex:1;min-width:220px">
+        <strong>Este conteúdo também está disponível em Libras.</strong>
+        <p style="margin:4px 0 0">Clique em <em>VLibras</em> na barra de acessibilidade ou use o widget fixo no canto da tela para assistir à apresentação em língua de sinais.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RADIAÇÃO ELETROMAGNÉTICA -->
+  <section id="radiacao" aria-labelledby="rad-title">
+    <h2 id="rad-title">1. Radiação eletromagnética: o que o Sol envia</h2>
+    <p>
+      O Sol emite energia na forma de <strong>ondas eletromagnéticas</strong> — oscilações
+      de campos elétricos e magnéticos que viajam à velocidade da luz (<em>c ≈ 3×10⁸ m/s</em>).
+      Essa energia se organiza em um <strong>espectro</strong>, do rádio aos raios gama.
+      A parte que nos interessa para aquecer a piscina do CEP está principalmente no
+      <strong>infravermelho</strong> e no <strong>visível</strong>.
+    </p>
+
+    <div class="grid grid-3">
+      <article class="card">
+        <h3>☀ Ultravioleta (UV)</h3>
+        <p>Comprimento de onda: 10–400 nm. Alta energia, mas pequena fração do que chega à superfície. Responsável por queimaduras.</p>
+      </article>
+      <article class="card">
+        <h3>🌞 Visível</h3>
+        <p>400–700 nm. É a faixa que nossos olhos e os sensores (LDR, fotodiodo) conseguem detectar com mais eficiência.</p>
+      </article>
+      <article class="card">
+        <h3>🔥 Infravermelho (IV)</h3>
+        <p>700 nm–1 mm. Carrega a maior parte da energia térmica que aquece a água da piscina.</p>
+      </article>
+    </div>
+
+    <div class="callout" role="note">
+      <strong>💡 Fórmula-chave:</strong> A energia de um fóton é <code>E = h·f</code>,
+      onde <em>h</em> é a constante de Planck (6,626×10⁻³⁴ J·s) e <em>f</em> é a frequência.
+      Quanto maior a frequência (menor o comprimento de onda), maior a energia do fóton.
+    </div>
+
+    <h3>Irradiância solar na superfície terrestre</h3>
+    <p>
+      Em um dia claro ao meio-dia, a irradiância solar direta que atinge uma superfície
+      perpendicular aos raios é de aproximadamente <strong>1000 W/m²</strong> (a chamada
+      "condição AM1.5", usada como padrão em testes de painéis e coletores). Esse valor
+      varia com a latitude, a estação do ano, a hora do dia e a presença de nuvens — e é
+      exatamente isso que nossos sensores vão medir.
+    </p>
+  </section>
+
+  <!-- SENSORES -->
+  <section id="sensores" aria-labelledby="sens-title">
+    <h2 id="sens-title">2. Sensores de luz: LDR e fotodiodo</h2>
+    <p>
+      Sensores fotoelétricos transformam <strong>luz em sinal elétrico</strong>. Os dois
+      mais comuns em projetos educacionais de robótica e automação — como o da piscina
+      do CEP — são o <strong>LDR</strong> (resistor dependente de luz) e o
+      <strong>fotodiodo</strong>. Eles respondem de formas diferentes, e entender isso
+      é essencial para escolher o sensor certo.
+    </p>
+
+    <div class="grid grid-2">
+      <article class="card" id="ldr">
+        <h3>🔆 LDR (Light Dependent Resistor)</h3>
+        <p>
+          Um <strong>resistor cujo valor muda com a luz</strong>. No escuro, sua resistência
+          pode passar de <strong>1 MΩ</strong>; sob luz forte, cai para cerca de
+          <strong>500 Ω</strong>. É barato, simples e ótimo para detectar presença de luz,
+          mas é <em>lento</em> (responde em dezenas de milissegundos) e <em>não linear</em>.
+        </p>
+        <p><strong>Curva típica:</strong> <code>R ≈ k · E<sup>−γ</sup></code>, onde <em>E</em> é o iluminamento em lux e γ ≈ 0,7–1,0.</p>
+        <p><strong>Uso no Projeto da Piscina:</strong> detectar se há luz solar suficiente para ativar a bomba do coletor ou acionar um alerta de "dia nublado".</p>
+      </article>
+
+      <article class="card" id="fotodiodo">
+        <h3>⚡ Fotodiodo</h3>
+        <p>
+          Um <strong>diodo semicondutor</strong> que gera uma corrente proporcional à luz
+          que recebe, quando operado reversamente. É <em>rápido</em> (responde em nanosegundos),
+          <em>linear</em> e mais preciso que o LDR, porém exige um circuito com amplificador
+          (transimpedância) para ler a corrente.
+        </p>
+        <p><strong>Curva típica:</strong> <code>I = S · E</code>, onde <em>S</em> é a sensibilidade (A/lux) e <em>E</em> o iluminamento.</p>
+        <p><strong>Uso no Projeto da Piscina:</strong> medir com precisão a irradiância ao longo do dia para calcular a energia total captada pelo coletor.</p>
+      </article>
+    </div>
+
+    <h3>Comparativo rápido</h3>
+    <table aria-label="Comparativo entre LDR e fotodiodo">
+      <thead>
+        <tr>
+          <th scope="col">Característica</th>
+          <th scope="col">LDR</th>
+          <th scope="col">Fotodiodo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Resposta à luz</td><td>Resistência diminui</td><td>Corrente aumenta</td></tr>
+        <tr><td>Velocidade</td><td>Lenta (ms)</td><td>Rápida (ns)</td></tr>
+        <tr><td>Linearidade</td><td>Não linear</td><td>Muito linear</td></tr>
+        <tr><td>Custo</td><td>Muito baixo</td><td>Baixo/médio</td></tr>
+        <tr><td>Precisão</td><td>Baixa</td><td>Alta</td></tr>
+        <tr><td>Ideal para</td><td>Detecção / acionamento</td><td>Medição quantitativa</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SIMULADORES -->
+  <section id="simuladores" aria-labelledby="sim-title">
+    <h2 id="sim-title">3. Simuladores interativos</h2>
+    <p>
+      Use os controles abaixo para explorar como os sensores respondem à luz e como
+      o posicionamento afeta a energia captada. Todos os simuladores são navegáveis
+      por teclado (use <kbd>Tab</kbd> e as setas).
+    </p>
+
+    <!-- SIMULADOR 1: LDR -->
+    <div class="simulator" role="region" aria-labelledby="sim1-title">
+      <h3 id="sim1-title">🧪 Simulador 1 — Como um LDR responde à luz</h3>
+      <p>Mova o controle de intensidade luminosa e observe a resistência do LDR, a tensão no divisor e o estado do LED indicador.</p>
+
+      <div class="sim-stage ldr-visual" aria-hidden="true">
+        <div class="sun" id="sim1-sun" style="opacity:.3;transform:translateX(-50%) scale(.5)"></div>
+        <div class="ldr-sensor">LDR</div>
+        <div class="led-indicator" id="sim1-led" aria-hidden="true"></div>
+      </div>
+
+      <div class="sim-controls">
+        <div class="control">
+          <label for="sim1-light">Intensidade luminosa: <span id="sim1-light-val">200</span> lux</label>
+          <input type="range" id="sim1-light" min="0" max="2000" step="10" value="200"
+                 aria-describedby="sim1-desc">
+        </div>
+        <div class="control">
+          <label for="sim1-vcc">Tensão de alimentação (Vcc): <span id="sim1-vcc-val">5.0</span> V</label>
+          <input type="range" id="sim1-vcc" min="3" max="12" step="0.1" value="5">
+        </div>
+      </div>
+
+      <div class="readout" aria-live="polite" id="sim1-readout">
+        <div class="metric"><strong>Iluminamento</strong><span class="value" id="sim1-r-lux">200 lux</span></div>
+        <div class="metric"><strong>Resistência do LDR</strong><span class="value" id="sim1-r-ldr">—</span></div>
+        <div class="metric"><strong>Tensão no LDR (Vout)</strong><span class="value" id="sim1-r-vout">—</span></div>
+        <div class="metric"><strong>LED indicador</strong><span class="value" id="sim1-r-led">Apagado</span></div>
+      </div>
+      <p id="sim1-desc" class="visually-hidden" style="position:absolute;left:-9999px">
+        Simulador de um LDR em um divisor de tensão. Ajuste a luz e veja a resistência e a tensão de saída.
+      </p>
+    </div>
+
+    <!-- SIMULADOR 2: COMPARATIVO DE POSIÇÕES -->
+    <div class="simulator" role="region" aria-labelledby="sim2-title">
+      <h3 id="sim2-title">📏 Simulador 2 — Comparando intensidade em diferentes posições</h3>
+      <p>
+        A intensidade luminosa obedece à <strong>lei do inverso do quadrado da distância</strong>:
+        <code>E = I / d²</code>. Mova os sensores e veja como a leitura muda.
+      </p>
+
+      <div class="sim-stage" style="padding:20px;background:linear-gradient(180deg,#fff6c2,#caf0f8)">
+        <div style="text-align:center;font-size:40px" aria-hidden="true">☀</div>
+        <p style="text-align:center;margin:6px 0"><em>Fonte de luz pontual no topo</em></p>
+
+        <div class="grid grid-3" style="margin-top:14px">
+          <div class="card" style="text-align:center">
+            <strong>Sensor A</strong>
+            <div class="control" style="margin-top:8px">
+              <label for="s2a">Distância: <span id="s2a-v">1.0</span> m</label>
+              <input type="range" id="s2a" min="0.5" max="5" step="0.1" value="1">
+            </div>
+            <p style="margin-top:8px"><strong>Leitura:</strong> <span id="s2a-read">—</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <strong>Sensor B</strong>
+            <div class="control" style="margin-top:8px">
+              <label for="s2b">Distância: <span id="s2b-v">2.0</span> m</label>
+              <input type="range" id="s2b" min="0.5" max="5" step="0.1" value="2">
+            </div>
+            <p style="margin-top:8px"><strong>Leitura:</strong> <span id="s2b-read">—</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <strong>Sensor C</strong>
+            <div class="control" style="margin-top:8px">
+              <label for="s2c">Distância: <span id="s2c-v">3.0</span> m</label>
+              <input type="range" id="s2c" min="0.5" max="5" step="0.1" value="3">
+            </div>
+            <p style="margin-top:8px"><strong>Leitura:</strong> <span id="s2c-read">—</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout ok" role="note">
+        <strong>📐 Conclusão prática:</strong> dobrar a distância reduz a intensidade a
+        <strong>1/4</strong>; triplicar, a <strong>1/9</strong>. Por isso, no Projeto da
+        Piscina, os sensores devem ficar <em>o mais próximo possível</em> da superfície
+        a ser monitorada, mas sem fazer sombra no coletor.
+      </div>
+    </div>
+
+    <!-- SIMULADOR 3: POSICIONAMENTO DO COLETOR -->
+    <div class="simulator" role="region" aria-labelledby="sim3-title">
+      <h3 id="sim3-title">🎯 Simulador 3 — Melhor posicionamento do coletor solar</h3>
+      <p>
+        A energia captada por uma superfície depende do <strong>cosseno do ângulo de incidência</strong>:
+        <code>E_efetiva = E · cos(θ)</code>. O coletor deve ficar perpendicular aos raios
+        solares para captar o máximo. Ajuste a inclinação e a hora do dia.
+      </p>
+
+      <div class="sim-stage collector-stage" aria-hidden="true">
+        <div class="collector-sun" id="s3-sun"></div>
+        <div class="ground"></div>
+        <div class="collector-panel" id="s3-panel"></div>
+      </div>
+
+      <div class="sim-controls">
+        <div class="control">
+          <label for="s3-angle">Inclinação do coletor: <span id="s3-angle-v">30</span>°</label>
+          <input type="range" id="s3-angle" min="0" max="90" step="1" value="30">
+        </div>
+        <div class="control">
+          <label for="s3-hour">Hora do dia: <span id="s3-hour-v">12:00</span></label>
+          <input type="range" id="s3-hour" min="6" max="18" step="0.25" value="12">
+        </div>
+        <div class="control">
+          <label for="s3-lat">Latitude (°): <span id="s3-lat-v">-23.5</span> (São Paulo)</label>
+          <input type="range" id="s3-lat" min="-60" max="60" step="0.5" value="-23.5">
+        </div>
+      </div>
+
+      <div class="readout" aria-live="polite">
+        <div class="metric"><strong>Altura solar</strong><span class="value" id="s3-r-alt">—</span></div>
+        <div class="metric"><strong>Ângulo de incidência</strong><span class="value" id="s3-r-inc">—</span></div>
+        <div class="metric"><strong>Irradiância efetiva</strong><span class="value" id="s3-r-irr">—</span></div>
+        <div class="metric"><strong>Energia estimada/dia</strong><span class="value" id="s3-r-energy">—</span></div>
+      </div>
+
+      <div class="callout" role="note">
+        <strong>🏊 Aplicação na piscina do CEP:</strong> para maximizar o aquecimento,
+        o coletor deve ter inclinação próxima à <strong>latitude local</strong> (voltada
+        para o norte, no hemisfério sul). Nosso simulador mostra que, em São Paulo
+        (≈ −23,5°), uma inclinação de ~30° capta mais energia ao longo do ano.
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETO DA PISCINA -->
+  <section id="piscina" aria-labelledby="pisc-title">
+    <h2 id="pisc-title">4. Conexão com o Projeto da Piscina do CEP</h2>
+    <p>
+      O <strong>Projeto da Piscina do CEP</strong> usa energia solar para aquecer a água,
+      reduzindo consumo elétrico e impactos ambientais. Os sensores de luz estudados
+      aqui são os <strong>"olhos"</strong> do sistema: eles dizem à robótica de controle
+      quando acionar a bomba, quando abrir ou fechar válvulas e quanto calor está sendo
+      captado em tempo real.
+    </p>
+
+    <div class="grid grid-2">
+      <article class="card">
+        <h3>🤖 Robótica de automação</h3>
+        <ul>
+          <li><strong>Arduino/ESP32</strong> lê LDR e fotodiodo via conversor A/D.</li>
+          <li>Algoritmo decide: se <em>lux &gt; limiar</em> e <em>ΔT &gt; 2 °C</em>, liga a bomba.</li>
+          <li>Atuadores (relés, válvulas) executam a ação física.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>🌱 Sustentabilidade</h3>
+        <ul>
+          <li>Redução estimada de <strong>30–60%</strong> no gasto com aquecimento elétrico.</li>
+          <li>Menos demanda na rede = menos queima de combustíveis fósseis.</li>
+          <li>Projeto didático: alunos aprendem física, programação e cidadania.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="libras-box" role="region" aria-label="Explicação em Libras sobre a piscina">
+      <div class="libras-icon" aria-hidden="true">🤟</div>
+      <div style="flex:1;min-width:220px">
+        <strong>Vídeo em Libras — explicação do projeto</strong>
+        <p style="margin:4px 0 0">Espaço preparado para vídeo de um intérprete de Libras explicando como os sensores integram o sistema de aquecimento da piscina do CEP. Use o VLibras para tradução automática do texto acima.</p>
+      </div>
+    </div>
+
+    <h3>Fluxo simplificado do sistema</h3>
+    <ol>
+      <li><strong>Sol</strong> emite radiação → coletor absorve e aquece o fluido.</li>
+      <li><strong>Fotodiodo</strong> mede irradiância contínua (dados precisos).</li>
+      <li><strong>LDR</strong> detecta "há sol suficiente?" (decisão rápida).</li>
+      <li><strong>Controlador</strong> (ESP32) cruza dados e aciona a bomba.</li>
+      <li><strong>Sensores de temperatura</strong> (NTC/DS18B20) monitoram a água da piscina.</li>
+      <li><strong>Painel web</strong> (este site!) exibe dados em tempo real para a comunidade escolar.</li>
+    </ol>
+  </section>
+
+  <!-- LIMITAÇÕES -->
+  <section id="limitacoes" aria-labelledby="lim-title">
+    <h2 id="lim-title">5. Limitações dos sensores para medir energia solar</h2>
+    <p>
+      Nenhum sensor é perfeito. Conhecer as limitações é tão importante quanto saber
+      usá-lo — especialmente em um projeto real como o da piscina do CEP.
+    </p>
+
+    <div class="grid grid-2">
+      <article class="card">
+        <h3>⚠️ Limitações do LDR</h3>
+        <ul>
+          <li><strong>Não linear:</strong> a relação lux × resistência é uma curva, não uma reta — exige calibração.</li>
+          <li><strong>Lento:</strong> não serve para medir variações rápidas (ex.: passagem de nuvens finas).</li>
+          <li><strong>Depende da temperatura:</strong> a resistência varia com o calor ambiente.</li>
+          <li><strong>Espectro limitado:</strong> responde mais ao visível que ao infravermelho (que é a maior parte da energia térmica do Sol).</li>
+          <li><strong>Envelhecimento:</strong> o material (CdS) perde sensibilidade com o tempo.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>⚠️ Limitações do fotodiodo</h3>
+        <ul>
+          <li><strong>Sinal pequeno:</strong> a corrente é da ordem de nano/microampères — exige amplificação cuidadosa.</li>
+          <li><strong>Ruído:</strong> interferências elétricas afetam a leitura.</li>
+          <li><strong>Angular:</strong> a resposta depende do ângulo de incidência (cosseno).</li>
+          <li><strong>Espectral:</strong> cada fotodiodo tem uma faixa de sensibilidade — nem todos cobrem IV.</li>
+          <li><strong>Custo maior</strong> que o LDR em projetos simples.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="callout warn" role="note">
+      <strong>🎯 Recomendação para o Projeto da Piscina:</strong> use o <strong>fotodiodo</strong>
+      (ou um <strong>piranômetro</strong> profissional) para medições quantitativas de
+      energia, e reserve o <strong>LDR</strong> para detecção binária ("há sol / não há sol").
+      Sempre calibre os sensores com um equipamento de referência e faça as leituras
+      fora da sombra do próprio coletor.
+    </div>
+  </section>
+
+  <!-- MAPA DO SITE -->
+  <section id="mapa" aria-labelledby="map-title">
+    <h2 id="map-title">6. Mapa do site</h2>
+    <nav class="sitemap" aria-label="Mapa do site Sensors">
+      <ul>
+        <li><a href="#top">🏠 Início — apresentação e Libras</a></li>
+        <li><a href="#radiacao">☀ Radiação eletromagnética — espectro e irradiância</a></li>
+        <li><a href="#sensores">🔆 Sensores — LDR, fotodiodo e comparativo</a>
+          <ul>
+            <li><a href="#ldr">LDR — funcionamento e curva</a></li>
+            <li><a href="#fotodiodo">Fotodiodo — linearidade e velocidade</a></li>
+          </ul>
+        </li>
+        <li><a href="#simuladores">🧪 Simuladores interativos</a>
+          <ul>
+            <li><a href="#sim1-title">Simulador 1 — Resposta do LDR</a></li>
+            <li><a href="#sim2-title">Simulador 2 — Comparativo de posições</a></li>
+            <li><a href="#sim3-title">Simulador 3 — Posicionamento do coletor</a></li>
+          </ul>
+        </li>
+        <li><a href="#piscina">🏊 Projeto da Piscina do CEP — integração com robótica</a></li>
+        <li><a href="#limitacoes">⚠️ Limitações dos sensores</a></li>
+      </ul>
+    </nav>
+  </section>
+
+</main>
+
+<!-- ============== RODAPÉ ============== -->
+<footer role="contentinfo">
+  <div class="foot-inner">
+    <div>
+      <strong>Sensors</strong> — site educacional sobre sensores de luz, radiação solar
+      e o Projeto da Piscina do CEP.<br>
+      Desenvolvido com foco em <strong>programação</strong>, <strong>tecnociência</strong>
+      e <strong>robótica</strong>, 100% acessível.
+    </div>
+    <div>
+      <strong>Acessibilidade</strong>
+      <ul style="list-style:none;padding:0">
+        <li>✓ Navegação por teclado</li>
+        <li>✓ Alto contraste</li>
+        <li>✓ Fonte para dislexia</li>
+        <li>✓ VLibras / Libras</li>
+        <li>✓ ARIA e semântica HTML5</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Créditos</strong>
+      <p style="margin:0">
+        Projeto integrador — Programação · Tecnociência · Robótica.<br>
+        © 2026 — uso educacional.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============== SCRIPTS ============== -->
+<script>
+/* =========================================================
+   SENSORS — Lógica dos simuladores e acessibilidade
+   ========================================================= */
+
+/* ---------- Acessibilidade ---------- */
+const root = document.documentElement;
+
+document.getElementById('btnContrast').addEventListener('click', e => {
+  const on = root.dataset.theme !== 'high-contrast';
+  root.dataset.theme = on ? 'high-contrast' : 'default';
+  e.currentTarget.setAttribute('aria-pressed', on);
+  try{ localStorage.setItem('sensors-contrast', on?'1':'0'); }catch(_){}
+});
+
+document.getElementById('btnDyslexic').addEventListener('click', e => {
+  const on = root.dataset.font !== 'dyslexic';
+  root.dataset.font = on ? 'dyslexic' : 'default';
+  e.currentTarget.setAttribute('aria-pressed', on);
+  try{ localStorage.setItem('sensors-dyslexic', on?'1':'0'); }catch(_){}
+});
+
+document.getElementById('btnFontUp').addEventListener('click', () => {
+  const cur = parseInt(getComputedStyle(root).getPropertyValue('--font-size'));
+  if (cur < 26) root.style.setProperty('--font-size', (cur+2)+'px');
+});
+document.getElementById('btnFontDown').addEventListener('click', () => {
+  const cur = parseInt(getComputedStyle(root).getPropertyValue('--font-size'));
+  if (cur > 14) root.style.setProperty('--font-size', (cur-2)+'px');
+});
+
+document.getElementById('btnVlibras').addEventListener('click', () => {
+  // VLibras já é carregado no final do body; aqui forçamos abertura se possível
+  const w = document.querySelector('.vpw-button');
+  if (w) w.click();
+  else alert('O widget do VLibras está carregando. Em alguns segundos ele aparecerá no canto da tela.');
+});
+
+// Restaurar preferências
+try{
+  if (localStorage.getItem('sensors-contrast')==='1'){
+    root.dataset.theme='high-contrast';
+    document.getElementById('btnContrast').setAttribute('aria-pressed','true');
+  }
+  if (localStorage.getItem('sensors-dyslexic')==='1'){
+    root.dataset.font='dyslexic';
+    document.getElementById('btnDyslexic').setAttribute('aria-pressed','true');
+  }
+}catch(_){}
+
+/* ---------- SIMULADOR 1 — LDR ---------- */
+const s1Light = document.getElementById('sim1-light');
+const s1Vcc   = document.getElementById('sim1-vcc');
+const s1Sun   = document.getElementById('sim1-sun');
+const s1Led   = document.getElementById('sim1-led');
+
+function updateSim1(){
+  const lux = +s1Light.value;
+  const vcc = +s1Vcc.value;
+  document.getElementById('sim1-light-val').textContent = lux.toFixed(0);
+  document.getElementById('sim1-vcc-val').textContent = vcc.toFixed(1);
+
+  // Modelo simplificado do LDR: R = 500k / (lux + 1)  (ohms), limitado
+  const Rldr = Math.max(200, Math.min(2e6, 500000 / (lux + 1)));
+  const Rfix = 10000; // resistor fixo de 10k do divisor
+  // Vout sobre o LDR (LDR em baixo, Rfix em cima → Vout sobe com luz)
+  const vout = vcc * (Rfix / (Rfix + Rldr)); // se LDR em baixo, Vout cai com luz
+  // Vamos usar configuração clássica: Vcc → Rfix → Vout → LDR → GND
+  // Vout = Vcc * Rldr / (Rfix + Rldr)  → Vout CAI quando luz aumenta
+  const voutReal = vcc * (Rldr / (Rfix + Rldr));
+
+  // Visual do sol
+  const norm = Math.min(1, lux/1500);
+  s1Sun.style.opacity = (0.25 + 0.75*norm).toFixed(2);
+  s1Sun.style.transform = `translateX(-50%) scale(${0.5 + 0.8*norm})`;
+
+  // LED acende se Vout (sobre LDR) < 1.5V (ou seja, muita luz)
+  // Vamos inverter: LED acende quando há MUITA luz → Vout baixa
+  const ledOn = lux > 400;
+  s1Led.classList.toggle('on', ledOn);
+
+  // Readout
+  document.getElementById('sim1-r-lux').textContent = lux.toFixed(0) + ' lux';
+  document.getElementById('sim1-r-ldr').textContent = Rldr >= 1000
+    ? (Rldr/1000).toFixed(1) + ' kΩ' : Rldr.toFixed(0) + ' Ω';
+  document.getElementById('sim1-r-vout').textContent = voutReal.toFixed(2) + ' V';
+  document.getElementById('sim1-r-led').textContent = ledOn ? 'Aceso ✅' : 'Apagado';
+}
+s1Light.addEventListener('input', updateSim1);
+s1Vcc.addEventListener('input', updateSim1);
+updateSim1();
+
+/* ---------- SIMULADOR 2 — Comparativo ---------- */
+const I0 = 1000; // intensidade fonte (lux·m²)
+function bindSim2(id){
+  const el = document.getElementById(id);
+  const val = document.getElementById(id+'-v');
+  const read = document.getElementById(id+'-read');
+  function upd(){
+    const d = +el.value;
+    val.textContent = d.toFixed(1);
+    const E = I0 / (d*d);
+    read.textContent = E.toFixed(0) + ' lux';
+  }
+  el.addEventListener('input', upd);
+  upd();
+}
+['s2a','s2b','s2c'].forEach(bindSim2);
+
+/* ---------- SIMULADOR 3 — Posicionamento do coletor ---------- */
+const s3Angle = document.getElementById('s3-angle');
+const s3Hour  = document.getElementById('s3-hour');
+const s3Lat   = document.getElementById('s3-lat');
+const s3Sun   = document.getElementById('s3-sun');
+const s3Panel = document.getElementById('s3-panel');
+
+function updateSim3(){
+  const angle = +s3Angle.value;     // inclinação do coletor (°)
+  const hour  = +s3Hour.value;      // hora (6–18)
+  const lat   = +s3Lat.value;       // latitude
+
+  document.getElementById('s3-angle-v').textContent = angle.toFixed(0);
+  const h = Math.floor(hour);
+  const m = Math.round((hour-h)*60);
+  document.getElementById('s3-hour-v').textContent =
+    String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  document.getElementById('s3-lat-v').textContent = lat.toFixed(1);
+
+  // Altura solar aproximada (simplificada):
+  // h_sol ≈ 90 - |lat - decl| - |12 - hora|*15
+  // declinação simplificada: ~0° (equinócio)
+  const decl = 0;
+  const alt  = Math.max(0, 90 - Math.abs(lat - decl) - Math.abs(12 - hour)*15);
+
+  // Posição do sol no palco (x proporcional à hora, y à altura)
+  const stageW = s3Sun.parentElement.clientWidth || 600;
+  const stageH = s3Sun.parentElement.clientHeight || 300;
+  const xNorm  = (hour - 6) / 12; // 0..1
+  const yNorm  = 1 - (alt / 90);  // 0 (alto) .. 1 (baixo)
+  s3Sun.style.left = (xNorm * (stageW - 60)) + 'px';
+  s3Sun.style.top  = (yNorm * (stageH - 120) + 10) + 'px';
+
+  // Inclinação do painel: 0° = horizontal, 90° = vertical
+  // No hemisfério sul, inclinar para o norte (para "cima-direita" visual)
+  s3Panel.style.transform = `translateX(-50%) rotate(${-angle}deg)`;
+
+  // Ângulo de incidência: diferença entre ângulo dos raios e normal do painel
+  // Raios chegam com ângulo = 90 - alt (em relação à horizontal)
+  // Normal do painel (voltada para cima-inclinada) = 90 - angle (hemisfério sul, virado pro norte)
+  // Para simplificar: θ = | (90 - alt) - (90 - angle) | = | angle - alt |
+  const theta = Math.abs(angle - alt);
+  const cosT  = Math.max(0, Math.cos(theta * Math.PI/180));
+
+  // Irradiância efetiva (considerando também a altura solar - mais baixa = mais atmosfera)
+  const E0 = 1000; // W/m²
+  const airMass = alt > 0 ? 1 / Math.sin(alt * Math.PI/180) : 99;
+  const atm = Math.exp(-0.2 * (airMass - 1)); // atenuação atmosférica simplificada
+  const Eeff = E0 * cosT * atm;
+
+  // Energia estimada no dia (integração grosseira: Eeff × 6h equivalentes)
+  const hoursEquiv = Math.max(0, 12 - Math.abs(12 - hour)) * 0.5 + 3;
+  const energy = (Eeff * hoursEquiv / 1000).toFixed(2); // kWh/m²
+
+  document.getElementById('s3-r-alt').textContent = alt.toFixed(1) + '°';
+  document.getElementById('s3-r-inc').textContent = theta.toFixed(1) + '°';
+  document.getElementById('s3-r-irr').textContent = Eeff.toFixed(0) + ' W/m²';
+  document.getElementById('s3-r-energy').textContent = energy + ' kWh/m²';
+}
+s3Angle.addEventListener('input', updateSim3);
+s3Hour.addEventListener('input', updateSim3);
+s3Lat.addEventListener('input', updateSim3);
+window.addEventListener('resize', updateSim3);
+updateSim3();
+
+/* ---------- VLibras init ---------- */
+try{
+  window.addEventListener('load', () => {
+    if (window.VLibras) new window.VLibras();
+  });
+}catch(_){}
+</script>
+
+<!-- VLibras widget -->
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+
+</body>
+</html>
