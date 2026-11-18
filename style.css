@@ -1,0 +1,929 @@
+/* =========================================================
+   SENSORS.CSS
+   Site educacional — Sensores de Luz, Radiação Solar
+   e o Projeto da Piscina do CEP
+   
+   Design System "Sol + Água"
+   Mobile-first · Acessível (WCAG 2.1 AA/AAA) · Responsivo
+   
+   Estrutura:
+   01. Reset & Base
+   02. Design Tokens (variáveis)
+   03. Tipografia
+   04. Acessibilidade (skip-link, foco, temas)
+   05. Layout (header, nav, toolbar)
+   06. Hero
+   07. Seções & Títulos
+   08. Cards & Grids
+   09. Callouts (informativos)
+   10. Tabelas
+   11. Caixas Libras
+   12. Simuladores
+   13. Rodapé
+   14. Mapa do site
+   15. Animações
+   16. Responsividade
+   17. Modo impresso
+   ========================================================= */
+
+
+/* =========================================================
+   01. RESET & BASE
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-base);
+  font-size: var(--font-size);
+  line-height: var(--lh);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--agua-3);
+  text-underline-offset: 3px;
+}
+
+
+/* =========================================================
+   02. DESIGN TOKENS (VARIÁVEIS)
+   Paleta "Sol + Água" + superfícies + tipografia
+   ========================================================= */
+:root {
+  /* Paleta Sol */
+  --sol-1: #ffd166;
+  --sol-2: #ff8a00;
+  --sol-3: #e85d04;
+
+  /* Paleta Água */
+  --agua-1: #caf0f8;
+  --agua-2: #48cae4;
+  --agua-3: #0077b6;
+  --agua-4: #03045e;
+
+  /* Superfícies */
+  --bg: #fffaf0;
+  --bg-2: #ffffff;
+  --surface: #ffffff;
+  --text: #0a1a2f;
+  --text-soft: #2b3a55;
+  --muted: #5a6b85;
+  --border: #d9e2ec;
+  --focus: #0077b6;
+  --ok: #2a9d8f;
+  --warn: #e76f51;
+
+  /* Tipografia */
+  --font-base: 'Inter', 'Atkinson Hyperlegible', system-ui, -apple-system,
+               'Segoe UI', Roboto, sans-serif;
+  --font-size: 17px;
+  --lh: 1.65;
+
+  /* Espaçamentos e formas */
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-lg: 22px;
+  --shadow: 0 6px 18px rgba(3, 4, 94, 0.08);
+  --shadow-lg: 0 18px 40px rgba(3, 4, 94, 0.15);
+  --shadow-soft: 0 2px 8px rgba(3, 4, 94, 0.06);
+
+  /* Transições */
+  --t-fast: 120ms;
+  --t-base: 220ms;
+  --t-slow: 400ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* =========================================================
+   03. TIPOGRAFIA
+   ========================================================= */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text);
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+h2 { font-size: clamp(1.4rem, 3vw, 2rem); }
+h3 { font-size: 1.25rem; color: var(--agua-4); }
+h4 { font-size: 1.05rem; }
+
+p { margin: 0 0 1em; color: var(--text-soft); }
+
+strong { color: var(--text); }
+
+code, kbd {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 0.92em;
+  background: var(--agua-1);
+  color: var(--agua-4);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+kbd {
+  background: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text);
+  box-shadow: 0 2px 0 rgba(0,0,0,.2);
+}
+
+
+/* =========================================================
+   04. ACESSIBILIDADE
+   Skip-link · Foco visível · Alto contraste · Dislexia · Fontes
+   ========================================================= */
+
+/* Skip link (aparece só ao focar) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--focus);
+  color: #fff;
+  padding: 12px 18px;
+  font-weight: 700;
+  z-index: 9999;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
+/* Foco visível universal */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Elementos visualmente ocultos (mas acessíveis a leitores de tela) */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- MODO ALTO CONTRASTE (WCAG AAA) ---------- */
+html[data-theme="high-contrast"] {
+  --bg: #000000;
+  --bg-2: #000000;
+  --surface: #000000;
+  --text: #ffffff;
+  --text-soft: #ffffff;
+  --muted: #e5e5e5;
+  --border: #ffffff;
+  --focus: #ffeb3b;
+  --sol-1: #ffeb3b;
+  --sol-2: #ff9800;
+  --sol-3: #ff5722;
+  --agua-1: #000000;
+  --agua-2: #4fc3f7;
+  --agua-3: #ffffff;
+  --agua-4: #ffffff;
+  --ok: #66ff66;
+  --warn: #ff6666;
+  --shadow: none;
+  --shadow-lg: none;
+  --shadow-soft: none;
+}
+
+/* ---------- FONTE PARA DISLEXIA ---------- */
+html[data-font="dyslexic"] {
+  --font-base: 'OpenDyslexic', 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+/* ---------- TAMANHO DE FONTE AJUSTÁVEL ---------- */
+html[data-font="large"]  { --font-size: 20px; }
+html[data-font="xlarge"] { --font-size: 23px; }
+
+
+/* =========================================================
+   05. LAYOUT — HEADER, NAV, TOOLBAR
+   ========================================================= */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(135deg, var(--sol-2), var(--agua-3));
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+html[data-theme="high-contrast"] .site-header {
+  background: #000;
+  border-bottom: 3px solid #fff;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Marca */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fff6c2 0%, #ffd166 35%, #ff8a00 70%, #0077b6 100%
+  );
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.4),
+    0 0 20px rgba(255, 209, 102, 0.6);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  animation: pulse-sun 4s ease-in-out infinite;
+}
+
+@keyframes pulse-sun {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255,255,255,.4), 0 0 20px rgba(255,209,102,.6); }
+  50%      { box-shadow: 0 0 0 3px rgba(255,255,255,.4), 0 0 32px rgba(255,209,102,.9); }
+}
+
+/* Menu principal */
+nav.primary ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+nav.primary a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background var(--t-base) var(--ease);
+}
+
+nav.primary a:hover,
+nav.primary a:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Barra de acessibilidade */
+.a11y-bar {
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.a11y-bar button {
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition:
+    transform var(--t-fast) var(--ease),
+    background var(--t-base) var(--ease),
+    color var(--t-base) var(--ease);
+}
+
+.a11y-bar button:hover { transform: translateY(-1px); }
+
+.a11y-bar button[aria-pressed="true"] {
+  background: var(--agua-3);
+  color: #fff;
+  border-color: var(--agua-3);
+}
+
+html[data-theme="high-contrast"] .a11y-bar button[aria-pressed="true"] {
+  background: #ffeb3b;
+  color: #000;
+  border-color: #ffeb3b;
+}
+
+
+/* =========================================================
+   06. HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(255,209,102,.9), transparent 55%),
+    radial-gradient(circle at 15% 85%, rgba(72,202,228,.9), transparent 55%),
+    linear-gradient(135deg, var(--sol-1), var(--agua-2));
+  color: #0a1a2f;
+  box-shadow: var(--shadow-lg);
+}
+
+html[data-theme="high-contrast"] .hero {
+  background: #000;
+  border: 3px solid #fff;
+  color: #fff;
+}
+
+.hero p {
+  color: inherit;
+  font-size: 1.1rem;
+  max-width: 720px;
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+
+/* =========================================================
+   07. SEÇÕES & TÍTULOS
+   ========================================================= */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 18px 60px;
+}
+
+section {
+  margin: 48px 0;
+  scroll-margin-top: 140px;
+}
+
+h2 {
+  border-left: 6px solid var(--sol-2);
+  padding-left: 14px;
+  margin-bottom: 0.6em;
+}
+
+html[data-theme="high-contrast"] h3 { color: #fff; }
+html[data-theme="high-contrast"] p  { color: #fff; }
+
+
+/* =========================================================
+   08. BOTÕES, CARDS & GRIDS
+   ========================================================= */
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  transition:
+    background var(--t-base) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+
+.btn:hover { transform: translateY(-1px); }
+
+.btn-primary { background: var(--agua-4); color: #fff; }
+.btn-primary:hover { background: var(--agua-3); }
+
+.btn-ghost { background: transparent; color: #fff; border-color: #fff; }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.2); }
+
+html[data-theme="high-contrast"] .btn-primary { background: #ffeb3b; color: #000; }
+html[data-theme="high-contrast"] .btn-ghost   { border-color: #ffeb3b; color: #ffeb3b; }
+
+/* Grids */
+.grid { display: grid; gap: 18px; }
+.grid-2 { grid-template-columns: 1fr; }
+.grid-3 { grid-template-columns: 1fr; }
+
+@media (min-width: 720px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  transition: transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card h3 { margin-top: 0; }
+
+
+/* =========================================================
+   09. CALLOUTS (caixas informativas)
+   ========================================================= */
+.callout {
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 16px 0;
+  border-left: 6px solid var(--agua-3);
+  background: var(--agua-1);
+  color: #003554;
+}
+
+.callout.warn { border-color: var(--warn); background: #fde9e4; color: #5a1a0b; }
+.callout.ok   { border-color: var(--ok);   background: #e6f5f2; color: #0b4f47; }
+
+html[data-theme="high-contrast"] .callout,
+html[data-theme="high-contrast"] .callout.warn,
+html[data-theme="high-contrast"] .callout.ok {
+  background: #000;
+  color: #fff;
+  border-color: #ffeb3b;
+}
+
+
+/* =========================================================
+   10. TABELAS
+   ========================================================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  background: var(--agua-3);
+  color: #fff;
+  font-weight: 700;
+}
+
+html[data-theme="high-contrast"] th {
+  background: #ffeb3b;
+  color: #000;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tbody tr:hover { background: rgba(72, 202, 228, 0.08); }
+
+
+/* =========================================================
+   11. CAIXAS LIBRAS
+   ========================================================= */
+.libras-box {
+  background: var(--agua-1);
+  border: 2px dashed var(--agua-3);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+html[data-theme="high-contrast"] .libras-box {
+  background: #000;
+  border-color: #ffeb3b;
+}
+
+.libras-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--agua-3);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   12. SIMULADORES
+   ========================================================= */
+.simulator {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: var(--shadow);
+}
+
+.simulator h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--agua-4);
+}
+
+html[data-theme="high-contrast"] .simulator h3 { color: #ffeb3b; }
+
+/* Palco do simulador */
+.sim-stage {
+  position: relative;
+  background: linear-gradient(180deg, #87ceeb 0%, #caf0f8 60%, #48cae4 100%);
+  border-radius: 12px;
+  min-height: 260px;
+  overflow: hidden;
+  margin: 14px 0;
+  border: 1px solid var(--border);
+}
+
+html[data-theme="high-contrast"] .sim-stage {
+  background: #000;
+  border: 2px solid #fff;
+}
+
+/* Controles */
+.sim-controls {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .sim-controls { grid-template-columns: 1fr 1fr; }
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control label {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Slider customizado (acessível) */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--agua-3);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--agua-3);
+  border: 3px solid #fff;
+  cursor: pointer;
+}
+
+input[type="range"]:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+html[data-theme="high-contrast"] input[type="range"] {
+  background: #333;
+}
+html[data-theme="high-contrast"] input[type="range"]::-webkit-slider-thumb {
+  background: #ffeb3b;
+  border-color: #000;
+}
+
+/* Painel de métricas (readout) */
+.readout {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin-top: 12px;
+}
+
+.readout .metric {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.readout .metric strong {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.readout .metric .value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--agua-4);
+}
+
+html[data-theme="high-contrast"] .readout .metric .value { color: #ffeb3b; }
+
+/* ---------- Simulador 1 — LDR ---------- */
+.ldr-visual {
+  position: relative;
+  height: 240px;
+}
+
+.sun {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6c2, #ffd166 40%, #ff8a00 80%);
+  box-shadow: 0 0 40px rgba(255, 209, 102, 0.8);
+  transform: translateX(-50%);
+  transition: all var(--t-slow) var(--ease);
+}
+
+.ldr-sensor {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 50px;
+  background: repeating-linear-gradient(45deg, #6b4423 0 6px, #8b5a2b 6px 12px);
+  border: 3px solid #3d2817;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.led-indicator {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #444;
+  border: 3px solid #222;
+  transition: all var(--t-base) var(--ease);
+}
+
+.led-indicator.on {
+  background: radial-gradient(circle, #fff, #ff3b3b 60%, #a00);
+  box-shadow: 0 0 30px #ff3b3b;
+}
+
+/* ---------- Simulador 3 — Coletor solar ---------- */
+.collector-stage {
+  position: relative;
+  height: 300px;
+  background: linear-gradient(180deg, #ffd8a8 0%, #ffe8cc 40%, #c8e6c9 100%);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+html[data-theme="high-contrast"] .collector-stage {
+  background: #000;
+  border: 2px solid #fff;
+}
+
+.collector-sun {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6c2, #ff8a00);
+  box-shadow: 0 0 30px #ffd166;
+  transition: all var(--t-slow) var(--ease);
+}
+
+.collector-panel {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  width: 160px;
+  height: 20px;
+  background: linear-gradient(135deg, #1a237e, #0d47a1);
+  border: 2px solid #000;
+  transform-origin: center bottom;
+  transition: transform var(--t-base) var(--ease);
+}
+
+.collector-panel::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(255,255,255,.3) 50%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(255,255,255,.3) 50%, transparent 51%);
+  background-size: 33% 50%;
+}
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(180deg, #8d6e63, #5d4037);
+}
+
+
+/* =========================================================
+   13. RODAPÉ
+   ========================================================= */
+footer {
+  background: var(--agua-4);
+  color: #fff;
+  padding: 30px 18px;
+  margin-top: 40px;
+}
+
+footer a { color: #ffd166; }
+
+html[data-theme="high-contrast"] footer {
+  background: #000;
+  border-top: 3px solid #fff;
+}
+
+footer .foot-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+@media (min-width: 720px) {
+  footer .foot-inner { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+
+/* =========================================================
+   14. MAPA DO SITE
+   ========================================================= */
+.sitemap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.sitemap ul { list-style: none; padding: 0; }
+.sitemap li { padding: 6px 0; border-bottom: 1px dashed var(--border); }
+.sitemap li:last-child { border: none; }
+.sitemap ul ul { margin-left: 20px; margin-top: 6px; }
+.sitemap a {
+  color: var(--agua-3);
+  font-weight: 600;
+  text-decoration: none;
+}
+.sitemap a:hover { text-decoration: underline; }
+
+
+/* =========================================================
+   15. ANIMAÇÕES (respeitando prefers-reduced-motion)
+   ========================================================= */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+section { animation: fade-in var(--t-slow) var(--ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* =========================================================
+   16. RESPONSIVIDADE
+   ========================================================= */
+@media (max-width: 640px) {
+  .header-inner { justify-content: center; text-align: center; }
+  nav.primary ul { justify-content: center; }
+  .hero { padding: 28px 18px; }
+  .simulator { padding: 14px; }
+  h2 { font-size: 1.3rem; }
+}
+
+@media (min-width: 1024px) {
+  :root { --font-size: 18px; }
+  main { padding: 32px 24px 80px; }
+}
+
+
+/* =========================================================
+   17. MODO IMPRESSO
+   ========================================================= */
+@media print {
+  .site-header,
+  .a11y-bar,
+  .simulator,
+  .libras-box,
+  footer,
+  .hero-cta,
+  [vw] { display: none !important; }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 12pt;
+  }
+
+  section { page-break-inside: avoid; }
+
+  a { color: #000; text-decoration: underline; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #555; }
+}
